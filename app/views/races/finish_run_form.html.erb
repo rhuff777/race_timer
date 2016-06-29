@@ -1,0 +1,43 @@
+<% content_for :title do %>Finish Run<% end %>
+<section class="well col-md-4 col-md-offset-0">
+<h2><%= @race.name %> - Finish Run</h2>
+<p id="notice"><%= notice %></p>
+<%= form_for @run, url: finish_run_race_path(@race), :html => {id: "finish_run"} do |f| %>
+  <% if @race.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@race.errors.count, "error") %> prohibited this race from being saved:</h2>
+
+      <ul>
+      <% @race.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @run.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@race.errors.count, "error") %> prohibited this run from being saved:</h2>
+
+      <ul>
+      <% @run.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="field">
+    <%= f.label :bib %><br>
+    <%= f.text_field :bib %>
+  </div>
+  <div class="field">
+    <%= f.label :finish_time %><br>
+    <%= f.text_field :finish %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Finish Run" %>
+  </div>
+<% end %>
+</section>

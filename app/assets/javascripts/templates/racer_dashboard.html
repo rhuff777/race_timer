@@ -1,0 +1,54 @@
+<header class="row">
+  <h1 class="text-center col-xs-12 col-md-offset-0">Start Order</h1>
+</header>
+<div class="simpleDemo row">
+
+    <div class="col-xs-12">
+        <div class="row">
+            <div ng-repeat="(listName, list) in models.lists" class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+        							<div class="row">
+                        <div class="col-xs-1"><h3 class="panel-title">Start Order</h3></div>
+                        <div class="col-xs-4"><h3 class="panel-title">Name</h3></div>
+                        <div class="col-xs-2"><h3 class="panel-title">Bib</h3></div>
+                        <div class="col-xs-2"><h3 class="panel-title">Boat Class</h3></div>
+                        <div class="col-xs-2"><h3 class="panel-title">Age Class</h3></div>
+                    	</div>
+                    </div>
+
+<ul dnd-list="racers">
+    <li ng-repeat="racer in racers"
+        dnd-draggable="racer"
+        dnd-moved="racers.splice($index, 1)"
+        dnd-effect-allowed="move"
+        dnd-selected="racers.selected = racer"
+        ng-class="{'selected': racers.selected === racer}"
+        >
+        <div class="col-xs-1">{{$index+1}}</div>
+				<div class="col-xs-4">{{racer.name}}</div>
+				<div class="col-xs-2">{{racer.bib}}</div>
+				<div class="col-xs-2">{{racer.boat_class}}</div>
+				{{racer.age_class}}
+    </li>
+</ul>
+
+										</div>
+                </div>
+            </div>
+        </div>
+
+				<div view-source="simple"></div>
+    <div class="col-md-4" style="display:none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Generated Model</h3>
+            </div>
+            <div class="panel-body">
+                <pre class="code">{{modelAsJson}}</pre>
+            </div>
+        </div>
+    </div>
+
+</div>
+<a href="/races">Back</a>

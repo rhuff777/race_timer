@@ -1,0 +1,26 @@
+<table class="table table-hover table-bordered">
+	<tr>
+		<th colspan="8">Name</th>
+		<th colspan="8">Bib</th>
+		<th colspan="7">Boat Class</th>
+	</tr>
+	<tr>
+		<td colspan="8"><%= racer.name %></td>
+		<td colspan="8"><%= racer.bib %></td>
+		<td colspan="7"><%= racer.boat_class %></td>
+	</tr>
+	<tr>
+		<th class="col-lg-1">Heat</th>
+		<% (1..20).each do |i| %>
+			<th><%= i %></th>
+		<% end %>
+		<th>Total</th>
+	</tr>
+	<tr><td class="text-nowrap"><%= heat %></td>
+		<% (1..20).each do |i| %>
+			<td></td>
+		<% end %>
+		<td></td>
+	</tr>
+</table>
+

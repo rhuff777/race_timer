@@ -1,0 +1,25 @@
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+			<th>Start Order</th>
+			<th>Name</th>
+      <th>Bib</th>
+      <th>Boat Class</th>
+      <th>Age Class</th>
+    </tr>
+  </thead>
+
+  <tbody>
+	<% @unstarted_racers.each do |racer| %>
+      <tr>
+				<td><%= racer.order %></td>
+				<td><%= racer.name %></td>
+				<td><%= racer.bib %></td>
+				<td><%= racer.boat_class %></td>
+				<td><%= racer.age_class %></td>
+			</tr>
+	<% end %>
+	</tbody>
+</table>
+
+

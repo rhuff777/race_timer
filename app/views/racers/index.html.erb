@@ -1,0 +1,54 @@
+<% content_for :title do %>Racers<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h1><%= @race.name %> - Listing Racers</h1>
+<p id="notice"><%= notice %></p>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Bib</th>
+      <th>Order</th>
+      <th>Boat class</th>
+      <th>Age class</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @racers.each do |racer| %>
+      <tr>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='racer' data-name='name' data-url='#{inline_update_racer_path(racer)}' data-original-title='Enter Name'>#{racer.name}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='racer' data-name='bib' data-url='#{inline_update_racer_path(racer)}' data-original-title='Enter Bib'>#{racer.bib}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='racer' data-name='order' data-url='#{inline_update_racer_path(racer)}' data-original-title='Enter Order'>#{racer.order}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='racer' data-name='boat_class' data-url='#{inline_update_racer_path(racer)}' data-original-title='Enter boat class'>#{racer.boat_class}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='racer' data-name='age_class' data-url='#{inline_update_racer_path(racer)}' data-original-title='Enter age class'>#{racer.age_class}</a>".html_safe %></td>
+        <td><%= link_to 'Show', racer %></td>
+        <td><%= link_to 'Edit', edit_racer_path(racer) %></td>
+        <td><%= link_to 'Destroy', racer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "Start Order", "#{racer_dashboard_races_path}#/#{@race.id}" %> | 
+<%= link_to 'New Racer', new_race_racer_path(@race) %> | 
+<%= link_to 'Destroy All ', clear_racers_race_path(@race), method: :post, data: { confirm: 'Are you sure?' } %> | 
+<%= link_to 'Score Strips', score_strips_race_path(@race) %> | 
+<%= link_to 'Import', import_race_racers_path(@race) %> | 
+<%= link_to 'Back to Races', races_path %>
+</section>
+
+
+<script>
+$(document).ready(function() {
+  $('.iseditable').editable(
+		{
+			"highlight":"#00FF00",
+		}
+  );
+
+});
+</script>
+
+

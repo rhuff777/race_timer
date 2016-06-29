@@ -1,0 +1,200 @@
+<% content_for :title do %>Finishes<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h2><%= @race.name %></h2>
+<h2>Finishes</h>
+<p id="notice"><%= notice %></p>
+
+<div class="container" style="background-color:#0000ff">
+	<div class="row">
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Heat</span>
+		</div>
+		<div class="col-xs-12 col-sm-3">
+			<span style="font-size:16px;color:#cccccc;">Name</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Bib</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Boat Class</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Start</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Finish</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Time</span>
+		</div>
+
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Status</span>
+		</div>
+
+	</div>
+</div>
+<div id="finishes" class="container" style="background-color:#ffffff">
+    <% @runs.each do |run| %>
+			<%= render :partial => 'finished_run', :locals => {:run => run} %>
+		<% end %>
+</div>
+</section>
+<section class="col-md-12 col-md-offset-0">
+<div id="racers"></div>
+
+<h2>Unfinished Starts</h2>
+
+<div class="container" style="background-color:#0000ff">
+	<div class="row">
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Heat</span>
+		</div>
+		<div class="col-xs-12 col-sm-3">
+			<span style="font-size:16px;color:#cccccc;">Name</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Bib</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Boat Class</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Start</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Finish</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Time</span>
+		</div>
+		<div class="col-xs-12 col-sm-1">
+			<span style="font-size:16px;color:#cccccc;">Status</span>
+		</div>
+
+	</div>
+</div>
+
+<div id="unfinished_runs" class="container" style="background-color:#ffffff">
+	<%= render :partial => 'unfinished_runs', :locals => {:unfinished_runs => @unfinished_runs} %>
+</div>
+
+	
+<br/>
+<br/>
+<%= link_to 'Back', races_path %> | 
+<% unless @runs.blank? %>
+	<%= link_to 'Check for more', check_for_more_runs_race_path({:race => {:id => @race}, :last_finish => @runs.last.finish.strftime('%2H:%2M:%2S.%2L')}), :remote => true, :method => :post, :id => 'check_for_more_link' %>
+<% else %>
+	<%= link_to 'Check for more', finishes_race_path(@race) %>
+<% end %>
+<br/>
+<%= link_to 'Destroy all unstarted finishes', clear_unstarted_finishes_race_path(@race), :method => :post, data: { confirm: 'Are you sure?' }  %>
+<br/>
+<%= link_to 'Sync last N finishes', sync_finishes_race_path(@race), :method => :post %>
+<br/>
+<%= link_to 'Sync last finish', sync_finish_race_path(@race), :method => :post %>
+<br>
+<%= "Auto Sync is #{@race.auto_sync}" %>
+</section>
+
+<script>
+$(document).ready(doit);
+
+function doit() {
+	$('.iseditable-select').editable({
+		showbuttons: false,
+    success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_boat_class_" + response._id.$oid;
+					if(response.boat_class) {
+						$(selector).text(response.boat_class);
+					} else {
+						$(selector).text('');
+					}
+					selector = "#racer_name_" + response._id.$oid;
+					if(response.name) {
+						$(selector).text(response.name);
+					} else {
+						$(selector).text('');
+					}
+					/*
+					selector = "#run_bib_" + response._id.$oid;
+					if(response.bib) {
+						$(selector).text(response.bib);
+					} else {
+						$(selector).text('');
+					}
+					*/
+				}
+		}
+
+   });
+
+
+  $('.iseditable').editable(
+		{
+			"highlight":"#00FF00",
+    	success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_score_" + response._id.$oid;
+					if(response.score) {
+						$(selector).text(response.score);
+					} else {
+						$(selector).text('');
+					}
+					if(response.raw_time) {
+						selector = "#run_raw_" + response._id.$oid;
+						$(selector).text(response.raw_time);
+					} else {
+						$(selector).text('');
+					}
+				}
+			}
+		}
+  );
+
+$('#status').editable({
+            type: 'select',
+            url: '../admin/callbacks/quickEdit.php?t=zone',
+            pk: 1,
+            showbuttons: true,
+						value: "rhkm",
+            source: function() {
+                var result;
+                $.ajax({
+                    url: '<%= racer_list_race_path(@race, :json) %>',
+                    data: {t: 'zone'},
+                    type: 'GET',
+                    global: false,
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        result = data;
+                    }
+                });
+                return result;
+            },
+            success: function(response, newValue) {
+                $(this).parent().siblings('td').children('a.area').data('zona', newValue);
+                console.log(response, newValue);
+            }
+        });
+    $('#group').editable({
+				showbuttons: false
+    });
+
+/*
+				source: [
+        {"value": 1, "text": 'banana'},
+        {"value": 2, "text": 'peach'},
+        {"value": 3, "text": 'apple'}
+       	],
+*/
+
+};
+</script>
+
+

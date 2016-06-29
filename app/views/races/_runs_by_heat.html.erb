@@ -1,0 +1,70 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Heat</th>
+			<th>Rank</th>
+			<th>Name</th>
+      <th>Bib</th>
+      <th>Boat Class</th>
+      <th>Age Group</th>
+      <th>Time</th>
+      <th>Penalties</th>
+      <th>Score</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+		<% place = 1 %>
+		<% lbc = '' %>
+		<% lheat = '' %>
+    <% @runs_by_heat.each do |run| %>
+			<% unless run.score.blank? %>
+			<% if place == 1 %>
+				<% lbc = run.boat_class %>
+				<% lheat = run.heat %>
+			<% else %>
+				<% if lbc != run.boat_class or lheat != run.heat %>
+					<% place = 1 %>
+					<% lbc = run.boat_class %>
+					<% lheat = run.heat %>
+				<% end %>
+			<% end %>
+
+      <tr>
+				<td class="col-xs-2"><%= run.heat %></td>
+				<td class="col-xs-1"><%= place %></td>
+				<td class="col-xs-4"><%= run.racer.blank? ? "" : run.racer.name %></td>
+				<td><%= run.bib %></td>
+				<td><%= run.boat_class %></td>
+				<td><%= run.racer.blank? ? "" : run.racer.age_class %></td>
+				<td><%= run.raw_time %></td>
+				<td><%= run.total_penalties %></td>
+				<td><%= run.score %></td>
+				<td><%= run.status %></td>
+			</tr>
+			<% end %>
+			<% place += 1 %>
+		<% end %>
+	</tbody>
+  <tbody>
+    <% @runs_by_heat.each do |run| %>
+			<% if run.score.blank? %>
+      <tr>
+				<td class="col-xs-2"><%= run.heat %></td>
+				<td class="col-xs-1"></td>
+				<td class="col-xs-4"><%= run.racer.blank? ? "" : run.racer.name %></td>
+				<td><%= run.bib %></td>
+				<td><%= run.boat_class %></td>
+				<td><%= run.racer.blank? ? "" : run.racer.age_class %></td>
+				<td><%= run.raw_time %></td>
+				<td><%= run.total_penalties %></td>
+				<td><%= run.score %></td>
+				<td><%= run.status %></td>
+			</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+
+</table>
+

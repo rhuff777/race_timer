@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start: 
+  finish: 
+  heat: 
+  raw_time: 
+  total_penalties: 
+  score: 
+
+two:
+  start: 
+  finish: 
+  heat: 
+  raw_time: 
+  total_penalties: 
+  score: 

@@ -1,0 +1,124 @@
+<% content_for :title do %>Runs<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h1><%= @race.name %> - Listing Runs</h1>
+<p id="notice"><%= notice %></p>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Start</th>
+      <th>Finish</th>
+      <th>Heat</th>
+      <th>Raw time</th>
+      <th>Penalties</th>
+      <th>Score</th>
+      <th>Bib</th>
+      <th>Boat Class</th>
+			<th>Name</th>
+      <th colspan="5"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @runs.each do |run| %>
+      <tr>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='status' data-url='#{inline_update_run_path(run)}' data-original-title='Enter status (New,Started,Finished,DNS,DNF,Q,O,DQ)'>#{run.status}</a>".html_safe %></td>
+				<% start = run.start.blank? ? run.start : run.start.strftime('%2H:%2M:%2S.%2L') %>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='start' data-url='#{inline_update_run_path(run)}' data-original-title='Enter start hh:mm:ss.ddd'>#{start}</a>".html_safe %></td>
+				<% finish = run.finish.blank? ? run.finish : run.finish.strftime('%2H:%2M:%2S.%2L') %>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='finish' data-url='#{inline_update_run_path(run)}' data-original-title='Enter finish hh:mm:ss.ddd'>#{finish}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='heat' data-url='#{inline_update_run_path(run)}' data-original-title='Enter heat name'>#{run.heat}</a>".html_safe %></td>
+        <td id="run_raw_<%= run.id %>"><%= run.raw_time.blank? ? run.raw_time : run.raw_time.round(2) %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='total_penalties' data-url='#{inline_update_run_path(run)}' data-original-title='Enter total penalty'>#{run.total_penalties}</a>".html_safe %></td>
+        <td id="run_score_<%= run.id %>"><%= run.score.blank? ? run.score : run.score.round(2) %></td>
+
+				<td>
+					<span id="run_bib_<%= run.id %>" style="font-size:12px;color:#000000;">
+<%= "<a href='#' data-type='select' data-pk='1' data-value='#{run.bib}' data-resource='racer' data-name='id' data-sourceCache=false data-source='#{racer_list_race_path(@race, :json, :racer => run.racer)}' data-url='#{inline_update_racer_run_path(run)}' data-title='Select racer' class='iseditable-select' data-original-title='' title=''>#{run.bib}</a>".html_safe %>
+					</span>
+
+				</td>
+
+				<td><%= run.boat_class %></td>
+				<% unless run.racer.blank? %>
+				<td><%= run.racer.name %></td>
+				<% else %>
+				<td></td>
+				<% end %>
+        <td><%= link_to 'Show', run %></td>
+        <td><%= link_to 'Edit', edit_run_path(run) %></td>
+        <td><%= link_to 'Destroy', run, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Reheat', reheat_run_path(run), method: :post %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+<%= link_to 'New Run', new_race_run_path(@race) %> | 
+<%= link_to 'Destroy All Runs', clear_runs_race_path(@race), method: :post, data: { confirm: 'Ary you sure?' } %> | 
+<%= link_to 'Back to races', races_path(@race) %> 
+</section>
+
+<script>
+$(document).ready(function() {
+  $('.iseditable').editable(
+		{
+			"highlight":"#00FF00",
+    	success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_score_" + response._id.$oid;
+					if(response.score) {
+						$(selector).text(response.score);
+					} else {
+						$(selector).text('');
+					}
+					if(response.raw_time) {
+						selector = "#run_raw_" + response._id.$oid;
+						$(selector).text(response.raw_time);
+					} else {
+						$(selector).text('');
+					}
+				}
+			}
+		}
+  );
+
+});
+
+	$('.iseditable-select').editable({
+		showbuttons: false,
+    success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_boat_class_" + response._id.$oid;
+					if(response.boat_class) {
+						$(selector).text(response.boat_class);
+					} else {
+						$(selector).text('');
+					}
+					selector = "#racer_name_" + response._id.$oid;
+					if(response.name) {
+						$(selector).text(response.name);
+					} else {
+						$(selector).text('');
+					}
+					/*
+					selector = "#run_bib_" + response._id.$oid;
+					if(response.bib) {
+						$(selector).text(response.bib);
+					} else {
+						$(selector).text('');
+					}
+					*/
+				}
+		}
+
+   });
+
+
+</script>
+
+

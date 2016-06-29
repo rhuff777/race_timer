@@ -1,0 +1,17 @@
+<% case run.status
+  when "DNS" then bc = "yellow"
+  when "DNF" then bc = "red"
+  when "Started" then bc = "light-blue"
+  when "Finished" then bc = "light-green"
+	else 
+		bc = ""
+	end
+%>
+<section class="well col-lg-7 col-lg-offset-3" style="background-color: <%= bc %>">
+<h1 class="h2 col-lg-10 col-lg-offset-2" style="margin-top: 0"><%= run.start.blank? ? "" : run.start.strftime("%T") %> <%= run.racer.bib %> <%= run.racer.bib != run.racer.name ? run.racer.name : '' %> </h1>
+	<div class="col-lg-7 col-lg-offset-3 text-center">
+    <%= link_to 'Destroy', run, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: "btn-lg btn-danger", style: "margin-right: 20px" %>
+    <%= link_to 'DNS', dns_run_path(run), method: :post, data: { confirm: 'Are you sure?' }, remote: true, class: "btn-lg btn-warning", style: "margin-right: 20px" %>
+    <%= link_to 'DNF', dnf_run_path(run), method: :post, data: { confirm: 'Are you sure?' }, remote: true, class: "btn-lg btn-danger", style: "margin-right: 20px" %>
+	</div>
+</section>

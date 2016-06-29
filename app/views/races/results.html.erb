@@ -1,0 +1,28 @@
+<% content_for :title do %>Results<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h1><%= @race.name %></h1>
+<p id="notice"><%= notice %></p>
+<% unless @best_of_by_age.blank? %>
+	<h2>Combined Heat Results by Age Class</h2>
+	<%= render :partial => 'best_of_by_age' %>
+	<div style="page-break-after:always"></div>
+<% end %>
+
+<% unless @best_of.blank? %>
+	<h2>Combined Heat Results For All Racers</h2>
+	<%= render :partial => 'best_of' %>
+	<div style="page-break-after:always"></div>
+<% end %>
+
+<% unless @runs_by_heat_by_age.blank? %>
+	<h2>Age Group Results By Heat</h2>
+	<%= render :partial => 'runs_by_heat_by_age' %>
+	<div style="page-break-after:always"></div>
+<% end %>
+
+<% unless @runs_by_heat_by_age.blank? %>
+	<h2>Combined Results For All Racers By Heat</h2>
+	<%= render :partial => 'runs_by_heat' %>
+<% end %>
+</section>
+<%= link_to 'Back', races_path %>

@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Gates:</strong>
+  <%= @penalty.gates[0] %>
+  <%= @penalty.gates[1] %>
+</p>
+
+<%= link_to 'Edit', edit_penalty_path(@penalty) %> |
+<%= link_to 'Back', penalties_path %>

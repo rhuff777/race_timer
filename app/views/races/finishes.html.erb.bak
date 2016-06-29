@@ -1,0 +1,131 @@
+<section class="col-md-12 col-md-offset-0">
+<h1>Listing Finishes</h1>
+<p id="notice"><%= notice %></p>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Heat</th>
+			<th>Name</th>
+      <th>Bib</th>
+      <th>Boat Class</th>
+      <th>Finishes</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @race.runs.each do |run| %>
+			<% unless run.finish.blank? %>
+      <tr>
+				<td><%= run.heat %></td>
+				<% unless run.racer.blank? %>
+					<td id="racer_name_<%= run.id %>"><%= run.racer.name %></td>
+				<% else %>
+					<td></td>
+				<% end %>
+<td>
+<%= "<a href='#' data-type='select' data-pk='1' data-value='#{}' data-resource='racer' data-name='id' data-source='#{racer_list_race_path(@race, :json)}' data-url='#{inline_update_racer_run_path(run)}' data-title='Select racer' class='iseditable-select' data-original-title='' title=''>#{run.bib}</a>".html_safe %>
+</td>
+				<td id="run_boat_class_<%= run.id %>"><%= run.boat_class %></td>
+				<td><%= run.finish.strftime('%2H:%2M:%2S.%2L') %></td>
+			</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+</section>	
+<%= link_to 'Back', races_path %>
+
+
+
+<script>
+$(document).ready(function() {
+
+	$('.iseditable-select').editable({
+		showbuttons: false,
+    success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_boat_class_" + response._id.$oid;
+					if(response.boat_class) {
+						$(selector).text(response.boat_class);
+					} else {
+						$(selector).text('');
+					}
+					selector = "#racer_name_" + response._id.$oid;
+					if(response.name) {
+						$(selector).text(response.name);
+					} else {
+						$(selector).text('');
+					}
+				}
+		}
+
+   });
+
+
+  $('.iseditable').editable(
+		{
+			"highlight":"#00FF00",
+    	success: function(response, newValue) {
+				var selector;
+				if(response._id) {
+					selector = "#run_score_" + response._id.$oid;
+					if(response.score) {
+						$(selector).text(response.score);
+					} else {
+						$(selector).text('');
+					}
+					if(response.raw_time) {
+						selector = "#run_raw_" + response._id.$oid;
+						$(selector).text(response.raw_time);
+					} else {
+						$(selector).text('');
+					}
+				}
+			}
+		}
+  );
+
+$('#status').editable({
+            type: 'select',
+            url: '../admin/callbacks/quickEdit.php?t=zone',
+            pk: 1,
+            showbuttons: true,
+						value: "rhkm",
+            source: function() {
+                var result;
+                $.ajax({
+                    url: '<%= racer_list_race_path(@race, :json) %>',
+                    data: {t: 'zone'},
+                    type: 'GET',
+                    global: false,
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        result = data;
+                    }
+                });
+                return result;
+            },
+            success: function(response, newValue) {
+                $(this).parent().siblings('td').children('a.area').data('zona', newValue);
+                console.log(response, newValue);
+            }
+        });
+    $('#group').editable({
+				showbuttons: false
+    });
+
+/*
+				source: [
+        {"value": 1, "text": 'banana'},
+        {"value": 2, "text": 'peach'},
+        {"value": 3, "text": 'apple'}
+       	],
+*/
+
+});
+</script>
+
+

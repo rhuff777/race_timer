@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start:</strong>
+  <%= @run.start %>
+</p>
+
+<p>
+  <strong>Finish:</strong>
+  <%= @run.finish_string %>
+</p>
+
+<p>
+  <strong>Heat:</strong>
+  <%= @run.heat %>
+</p>
+
+<p>
+  <strong>Raw time:</strong>
+  <%= @run.raw_time.blank? ? @run.raw_time : @run.raw_time.round(2) %>
+</p>
+
+<p>
+  <strong>Total penalties:</strong>
+  <%= @run.total_penalties %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @run.score.blank? ? @run.score : @run.score.round(2) %>
+</p>
+
+<%= link_to 'Edit', edit_run_path(@run) %> |
+<%= link_to 'Back', race_runs_path(@race) %>

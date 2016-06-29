@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  bib: MyString
+  order: 1
+  boat_class: MyString
+  age_class: MyString
+
+two:
+  name: MyString
+  bib: MyString
+  order: 1
+  boat_class: MyString
+  age_class: MyString

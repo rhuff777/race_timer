@@ -1,0 +1,42 @@
+<section class="well col-md-3 col-md-offset-0">
+<%= form_for(@racer) do |f| %>
+  <% if @racer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@racer.errors.count, "error") %> prohibited this racer from being saved:</h2>
+
+      <ul>
+      <% @racer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %> (Enter a first and last name OR a bib<br>
+    <%= f.text_field :name, :autofocus => true %>
+  </div>
+  <div class="field">
+    <%= f.label :bib %> (Must have boat class: eg: 22km or ohcm)<br>
+    <%= f.text_field :bib %>
+  </div>
+  <div class="field">
+    <%= f.label :boat_class %>*<br>
+    <% f.text_field :boat_class %>
+		<%= f.select :boat_class, [["k1m", "k1m"],["c1m", "c1m"], ['k1w', 'k1w'], ['c1w', 'c1w'], ['c2', 'c2'], ['oc1', 'oc1'], ['oc2', 'oc2'], ['other', 'zz']] %>
+  </div>
+  <div class="field">
+    <%= f.label :age_class %><br>
+    <%= f.text_field :age_class %>
+  </div>
+  <div class="field">
+    <%= f.label :order %><br>
+    <%= f.number_field :order %>
+  </div>
+  <%= f.hidden_field :race_id %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+* Required
+<% end %>
+</section>

@@ -1,0 +1,39 @@
+<%= form_for(@penalty) do |f| %>
+  <% if @penalty.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@penalty.errors.count, "error") %> prohibited this penalty from being saved:</h2>
+
+      <ul>
+      <% @penalty.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+		Race: 
+	<div>
+
+  <div class="field">
+		Bib:
+	<div>
+
+  <div class="field">
+		Heat:
+	<div>
+
+  <div class="field">
+    <%= f.label :gates %><br>
+    <%= f.text_field :gates, multiple: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gates %><br>
+    <%= f.text_field :gates, multiple: true %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

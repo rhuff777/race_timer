@@ -1,0 +1,13 @@
+{
+  "name": "dsl-generated dependencies",
+  "dependencies": {
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-resource": "latest",
+    "angular-mocks": "latest",
+    "angular-ui-grid": "latest",
+    "angular-drag-and-drop-lists": "latest",
+    "x-editable": "latest",
+    "bootstrap-sass-official": "latest"
+  }
+}

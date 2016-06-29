@@ -1,0 +1,46 @@
+		<% unless run.finish.blank? %>
+			<div  id="run_<%= run.id %>" class="row">
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.heat %></span>
+				</div>
+				<% unless run.racer.blank? %>
+					<div class="col-xs-12 col-sm-3">
+						<span id="racer_name_<%= run.id %>" style="font-size:16px;color:#000000;"><%= run.racer.name %></span>
+					</div>
+				<% else %>
+					<div class="col-xs-12 col-sm-3">
+						<span id="racer_name_<%= run.id %>" style="font-size:16px;color:#000000;"></span>
+					</div>
+				<% end %>
+				<div class="col-xs-12 col-sm-1">
+					<span id="run_bib_<%= run.id %>" style="font-size:16px;color:#000000;">
+<%= "<a href='#' data-type='select' data-pk='1' data-value='#{run.bib}' data-resource='racer' data-name='id' data-sourceCache=false data-source='#{racer_list_race_path(@race, :json, :racer => run.racer)}' data-url='#{inline_update_racer_run_path(run)}' data-title='Select racer' class='iseditable-select' data-original-title='' title=''>#{run.bib}</a>".html_safe %>
+					</span>
+
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span id="run_boat_class_<%= run.id %>" style="font-size:16px;color:#000000;"><%= run.boat_class %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<% unless run.start.blank? %>
+						<span style="font-size:16px;color:#000000;"><%= run.start.strftime('%2H:%2M:%2S.%2L') %></span>
+					<% end %>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.finish.strftime('%2H:%2M:%2S.%2L') %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.raw_time %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.status %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= link_to 'Unfinish', unfinish_run_path(run), method: :post, data: { confirm: 'Are you sure?' } %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= link_to 'Destroy', inline_destroy_run_path(run), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true %></span>
+				</div>
+			</div>
+		<% end %>
+

@@ -1,0 +1,80 @@
+<% content_for :title do %>Start<% end %>
+<div class="col-md-7 col-md-offset-3 text-center">
+	<h2><%= @race.name %> - Start Run</h2>
+	<p id="notice"><%= notice %></p>
+</div>
+
+<section class="well col-md-7 col-md-offset-3">
+	<h1 class="h3 text-center" style="margin-top: 0">
+		<span id="clock" ></span>
+		<span id="last_time"></span>
+		<%= content_tag "span", id: "start_interval", data: {interval: @race.round_start_interval} do %><% end %>
+	</h1>
+</section>
+
+
+<%= form_for @run, url: start_run_race_path(@race), :remote => true, class:"form-horizontal" do |f| %>
+<div class="form-group  form-group-lg">
+  <% if @race.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@race.errors.count, "error") %> prohibited this race from being saved:</h2>
+
+      <ul>
+      <% @race.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @run.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@race.errors.count, "error") %> prohibited this run from being saved:</h2>
+
+      <ul>
+      <% @run.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<section class="well col-lg-7 col-lg-offset-3">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-7 col-lg-offset-0" style="margin-bottom: 10px" >
+    		<%= f.select :bib, options_from_collection_for_select(@racers, :bib, :entry), { :prompt => 'Select a racer from start list or ...'}, :class => "form-control input-lg" %>
+			</div>
+   		<% f.label :racer, :class => "control-label col-xs-5 input-lg" %>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-7 col-lg-offset-0" style="margin-bottom: 10px" >
+    		<%= text_field_tag :bib_box, '', :placeholder => 'Or enter a 4 digit bib eg. jdcm for John Doe C1M (km,kw,cm,cw,c2,oc,oo)', :class => "form-control input-lg", :autocapitalize => "none"  %>
+			</div>
+    	<% f.label "John Doe = jdkm", :class => "control-label col-xs-5 input-lg" %>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-7 col-lg-offset-0" style="margin-bottom: 10px">
+    		<%= f.text_field :start, :placeholder => 'Start time', :class => "form-control input-lg" %>
+			</div>
+    	<% f.label :next_start, :class => "control-label col-xs-5 input-lg"  %>
+		</div>
+    <div class="row">
+			<div class="col-lg-offset-0 col-lg-6">
+    		<%= f.submit "Submit", :class => "btn-lg btn-primary", :id => "submit" %>
+			</div>
+		</div>
+	</div>
+</section>
+
+</div>
+<% end %>
+<div id="started_racers">
+<% @runs.each do |run| %>
+	<% unless run.start.blank? %>
+		<%= render run %>
+	<% end %>
+<% end %>
+</div>
+

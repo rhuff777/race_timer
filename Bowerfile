@@ -1,0 +1,9 @@
+asset 'angular'
+asset 'angular-route'
+asset 'angular-resource'
+asset 'angular-mocks'
+asset 'angular-ui-grid'
+asset 'angular-drag-and-drop-lists'
+asset 'x-editable'
+asset 'bootstrap-sass-official'
+# vim: ft=ruby

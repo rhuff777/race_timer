@@ -1,0 +1,8 @@
+$("#finishes").append("<%= escape_javascript(render :partial => 'finished_runs', :locals => {:runs => @runs}) %>");
+<% unless @last_run.blank? %>
+$("#check_for_more_link").replaceWith("<%= escape_javascript(link_to 'Check for more', check_for_more_runs_race_path({:race => {:id => @race}, :last_finish => @last_run.finish.strftime('%2H:%2M:%2S.%2L')}), :remote => true, :method => :post, :id => 'check_for_more_link') %>");
+<% end %>
+
+$("#unfinished_runs").html("<%= escape_javascript(render :partial => 'unfinished_runs', :locals => {:unfinished_runs => @unfinished_runs}) %>");
+
+doit();

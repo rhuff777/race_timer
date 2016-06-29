@@ -1,0 +1,18 @@
+<% content_for :title do %>Dashboard<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h1><%= @race.name %> Start/Finish Dashboard</h1>
+<p id="notice"><%= notice %></p>
+
+<% unless @best_of.blank? %>
+	<h2>Combined Heat Results For All Racers</h2>
+	<%= render :partial => 'best_of' %>
+	<div style="page-break-after:always"></div>
+<% end %>
+
+<% unless @unstarted_racers.blank? %>
+	<h2><%= @race.current_heat %> Next Start</h2>
+	<%= render :partial => 'unstarted_racers' %>
+	<div style="page-break-after:always"></div>
+<% end %>
+</section>
+<%= link_to 'Back', races_path %>

@@ -1,0 +1,56 @@
+<% content_for :title do %>Races<% end %>
+<section class="col-md-12 col-md-offset-0">
+<h1>Listing Races</h1>
+<p id="notice"><%= notice %></p>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Current heat</th>
+      <th colspan="11">Views</th>
+      <th colspan="6">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @races.each do |race| %>
+      <tr>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='race' data-name='name' data-url='#{inline_update_race_path(race)}' data-original-title='Enter Name'>#{race.name}</a>".html_safe %></td>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='race' data-name='current_heat' data-url='#{inline_update_race_path(race)}' data-original-title='Enter current heat'>#{race.current_heat}</a>".html_safe %></td>
+        <td><%= link_to "Racers (#{race.racers.count}) ", race_racers_path(race)  %></td>
+        <td><%= link_to "Start Order (#{race.racers.count}) ", "#{racer_dashboard_races_path}#/#{race.id}" %></td>
+        <td><%= link_to "Runs (#{race.runs.count})", race_runs_path(race) %></td>
+        <td><%= link_to 'Start Run', start_run_form_race_path(race) %></td>
+        <td><%= link_to 'Finish Run', finish_run_form_race_path(race) %></td>
+        <td><%= link_to 'Starts', starts_race_path(race) %></td>
+        <td><%= link_to 'Finishes', finishes_race_path(race) %></td>
+        <td><%= link_to "Penalties", race_penalties_path(race) %></td>
+        <td><%= link_to "#{race.current_heat} Results", results_race_path(race, :heat => race.current_heat) %></td>
+        <td><%= link_to 'Race Results', results_race_path(race) %></td>
+        <td><%= link_to 'Dashboard', dashboard_race_path(race) %></td>
+        <td><%= link_to 'Next Heat', next_heat_race_path(race), method: :post %></td>
+        <td><%= link_to 'Show', race %></td>
+        <td><%= link_to 'Edit', edit_race_path(race) %></td>
+        <td><%= link_to 'Destroy', race, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy All Runs', clear_runs_race_path(race), method: :post, data: { confirm: 'Ary you sure?' } %></td>
+        <td><%= link_to 'Destroy All Racers', clear_racers_race_path(race), method: :post, data: { confirm: 'Ary you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<%= link_to 'New Race', new_race_path %>
+</section>
+
+<script>
+$(document).ready(function() {
+  $('.iseditable').editable(
+		{
+			"highlight":"#00FF00",
+		}
+  );
+
+});
+</script>
+
+

@@ -1,0 +1,36 @@
+		<% unless run.start.blank? %>
+			<div class="row">
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.heat %></span>
+				</div>
+				<% unless run.racer.blank? %>
+					<div class="col-xs-12 col-sm-3">
+						<span id="racer_name_<%= run.id %>" style="font-size:16px;color:#000000;"><%= run.racer.name %></span>
+					</div>
+				<% else %>
+					<div class="col-xs-12 col-sm-4">
+						<span id="racer_name_<%= run.id %>" style="font-size:16px;color:#000000;"></span>
+					</div>
+				<% end %>
+				<div class="col-xs-12 col-sm-1">
+					<span id="run_bib_<%= run.id %>" style="font-size:16px;color:#000000;"><%= run.bib %>
+					</span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span id="run_boat_class_<%= run.id %>" style="font-size:16px;color:#000000;"><%= run.boat_class %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.start.strftime('%2H:%2M:%2S.%2L') %></span>
+				</div>
+				<div class="col-xs-12 col-sm-2">
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= run.status %></span>
+				</div>
+				<div class="col-xs-12 col-sm-1">
+					<span style="font-size:16px;color:#000000;"><%= link_to 'Finish', authorize_finish_race_path(:run_id => run.id), method: :post  %></span>
+				</div>
+
+			</div>
+		<% end %>
+

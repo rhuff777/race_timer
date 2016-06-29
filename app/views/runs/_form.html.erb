@@ -1,0 +1,60 @@
+<section class="well col-md-3 col-md-offset-0">
+<%= form_for(@run) do |f| %>
+  <% if @run.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@run.errors.count, "error") %> prohibited this run from being saved:</h2>
+
+      <ul>
+      <% @run.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :start %><br>
+    <%= f.text_field :start_string, :size => 22 %>
+  </div>
+  <div class="field">
+    <%= f.label :finish %><br>
+    <%= f.text_field :finish_string, :size => 22 %>
+  </div>
+  <div class="field">
+    <%= f.label :heat %><br>
+    <%= f.text_field :heat %>
+  </div>
+  <div class="field">
+    <%= f.label :raw_time %><br>
+    <%= f.text_field :raw_time %>
+  </div>
+  <div class="field">
+    <%= f.label :total_penalties %><br>
+    <%= f.text_field :total_penalties %>
+  </div>
+  <div class="field">
+    <%= f.label :score %><br>
+    <%= f.text_field :score %>
+  </div>
+  <div class="field">
+    <%= f.label :bib %><br>
+    <%= f.text_field :bib %>
+  </div>
+  <div class="field">
+    <%= f.label :boat_class %><br>
+    <%= f.text_field :boat_class %>
+  </div>
+  <div class="field">
+    <%= f.label :age_class %><br>
+    <%= f.text_field :age_class %>
+  </div>
+
+
+  <%= f.hidden_field :race_id %>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+</section>
