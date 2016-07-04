@@ -70,6 +70,8 @@ puts "Wait for PhidgetInterfaceKit to attach..."
 MIN_RESET_TIME = 1.0 #s
 BASE_URL = "http://rm.local/races/"
 #BASE_URL = "http://race-manager.geosugar.com/races/"
+UTC_OFFSET = "-05:00"  #Moutain: "-06:00"
+UTC_OFFSET_HOURS = 5 #Moutain: 6
 
 def format_timestamp(ts)
   frac = ts.to_f - ts.to_i
@@ -86,7 +88,7 @@ begin
 Phidgets::InterfaceKit.new do |ifkit|
 
 	last_value = 1000
-	last_time = Time.now.getlocal('-06:00')
+	last_time = Time.now.getlocal(UTC_OFFSET)
 
 	puts "Linked to Race Manager at: #{BASE_URL}#{@race_id}" 
 	puts "Device attributes: #{ifkit.attributes} attached"
@@ -159,13 +161,13 @@ Phidgets::InterfaceKit.new do |ifkit|
 				m = gps.time[:minutes]
 				s = gps.time[:seconds]
         ms = gps.time[:milliseconds].to_s[0]
-				h -= 6
+				h -= UTC_OFFSET_HOURS
 				if h < 0
 					h += 24
 				end
 				gps_time = "#{h}:#{m}:#{s}.#{ms}"
 				#gps_time = "#{gps.time[:hours]}:#{gps.time[:minutes]}:#{gps.time[:seconds]}.#{gps.time[:milliseconds].to_s[0]}"
-				time_stamp = Time.now.getlocal('-06:00')
+				time_stamp = Time.now.getlocal(UTC_OFFSET)
 				if time_stamp - last_time > MIN_RESET_TIME
 					ts = time_stamp.strftime('%Y-%m-%d ') + gps_time
 					#puts "Sensor #{input.index}'s value has changed to #{value} at " + ts
