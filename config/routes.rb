@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   resources :races do
 		member do
+			post 'auto_start_run'
+			post 'test_auto_start'
 			post 'start_run'
 			post 'finish_run'
 			post 'next_heat'
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
 			post 'sync_finishes'
 			post 'clear_unstarted_finishes'
 			get 'start_run_form'
+			get 'auto_start_run_form'
 			get 'finish_run_form'
 			put 'inline_update'
 			get 'starts'

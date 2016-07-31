@@ -7,6 +7,7 @@
   <thead>
     <tr>
       <th>Status</th>
+      <th>PreStart</th>
       <th>Start</th>
       <th>Finish</th>
       <th>Heat</th>
@@ -24,6 +25,8 @@
     <% @runs.each do |run| %>
       <tr>
 				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='status' data-url='#{inline_update_run_path(run)}' data-original-title='Enter status (New,Started,Finished,DNS,DNF,Q,O,DQ)'>#{run.status}</a>".html_safe %></td>
+				<% prestart = run.prestart.blank? ? run.prestart : run.prestart.strftime('%2H:%2M:%2S.%2L') %>
+				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='start' data-url='#{inline_update_run_path(run)}' data-original-title='Enter start hh:mm:ss.ddd'>#{prestart}</a>".html_safe %></td>
 				<% start = run.start.blank? ? run.start : run.start.strftime('%2H:%2M:%2S.%2L') %>
 				<td><%= "<a href='#' class='iseditable' data-type='text' data-resource='run' data-name='start' data-url='#{inline_update_run_path(run)}' data-original-title='Enter start hh:mm:ss.ddd'>#{start}</a>".html_safe %></td>
 				<% finish = run.finish.blank? ? run.finish : run.finish.strftime('%2H:%2M:%2S.%2L') %>

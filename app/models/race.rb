@@ -7,6 +7,7 @@ class Race
 	field :start_date, type: Date
 	field :lock_racer_list_finish, type: Boolean, default: true
 	field :auto_sync, type: Boolean, default: false
+	field :auto_start, type: Boolean, default: false
 
 	has_many :racers
 	has_many :runs

@@ -1,5 +1,5 @@
 class RacesController < ApplicationController
-  before_action :set_race, only: [:show, :edit, :update, :destroy, :start_run, :start_run_form, :finish_run, :finish_run_form, :next_heat, :clear_runs, :clear_racers, :inline_update, :starts, :finishes, :sync_finish, :sync_finishes, :results, :dashboard, :print_start_order, :racer_list, :check_for_more_runs, :score_strips, :clear_unstarted_finishes, :authorize_finish]
+  before_action :set_race, only: [:show, :edit, :update, :destroy, :start_run, :start_run_form, :auto_start_run, :auto_start_run_form, :test_auto_start, :finish_run, :finish_run_form, :next_heat, :clear_runs, :clear_racers, :inline_update, :starts, :finishes, :sync_finish, :sync_finishes, :results, :dashboard, :print_start_order, :racer_list, :check_for_more_runs, :score_strips, :clear_unstarted_finishes, :authorize_finish]
 	protect_from_forgery except: [:finish_run, :start_run, :save_all_racers]
 
 	def print_start_order
@@ -263,7 +263,115 @@ class RacesController < ApplicationController
     end
 
 	end
-  # GET /races/1/start_run_form
+
+	def test_auto_start
+		#get the last run started
+		starts = @race.runs.where(heat: @race.current_heat, status: "Started").order_by(:start => "desc")
+		@run = starts.first
+		#set the prestart time to the posted time
+		unless @run.blank?
+			@run.prestart = Time.parse(params[:run][:start])
+			message = 'prestart for last start was successfully set.'
+		end
+    respond_to do |format|
+			unless @run.blank?
+	      if @run.save
+		      format.html { redirect_to auto_start_run_form_race_path(@race), notice: message }
+  		    #format.json { render :show, status: :created, location: @race }
+					format.js {}
+      		format.json { render status: :created }
+	      else
+  	      format.html { redirect_to auto_start_run_form_race_path(@race), notice: 'Prestart could not be set: save failed'}
+    	    format.json { render json: @race.errors, status: :unprocessable_entity }
+      	end
+			else
+  	      format.html { redirect_to auto_start_run_form_race_path(@race), notice: 'Prestart could not be set: no runs'}
+    	    format.json { render json: @race.errors, status: :unprocessable_entity }
+			end
+    end
+	end
+
+	def auto_start_run_form
+		@run = Run.new
+		@run.start = Time.now.strftime("%T")
+	end
+
+	def auto_start_run
+		#find the most recent PreStarted run
+		prestarts = @race.runs.where(heat: @race.current_heat, status: "PreStarted").order_by(:prestart => "desc")
+		@run = prestarts.first
+		#set the start time
+		unless @run.blank?
+			unless params[:run][:start].blank?
+				@run.start = Time.parse(params[:run][:start])
+				@run.status = "Started"
+			end
+			message = 'PreStarted run was successfully started.'
+		else
+			@run = Run.new
+			if !params['bib_box'].blank?
+				@bib = params['bib_box']
+			else
+				@bib = params[:run][:bib]
+			end
+			if @bib.blank?
+				@bib="#{Time.now}_zz"
+			end
+			@run.bib = @bib
+			@run.boat_class = get_boat_class(@bib)
+			if params[:run][:start].blank?
+				@run.start = Time.now.round_off(@race.round_start_interval)
+			else
+				@run.start = Time.parse(params[:run][:start])
+			end
+			if !@race.runs.where(bib: @bib, boat_class: @boat_class, heat: @race.current_heat ).blank?
+				@run.heat = "#{@race.current_heat}_#{Time.now}"
+			else
+				@run.heat = @race.current_heat
+			end
+			if !@run.bib.blank?
+				if @race.racers.where(bib: @run.bib).blank?
+					@racer = Racer.new(:bib => @run.bib, :name => @run.bib, :boat_class => get_boat_class(@run.bib))
+					@racer.order = @race.next_racer_order
+					@race.racers << @racer
+					@racer.save
+				else
+					@racer = @race.racers.find_by(bib: @run.bib)
+				end
+			end
+			if !@race.blank?
+				@race.runs << @run
+			end
+			if !@racer.blank?
+				@racer.runs << @run
+			end
+			message = 'NOT Prestarted! Run was successfully started anyway.'
+		end
+		@run.status = "Started"
+    respond_to do |format|
+			unless @run.blank?
+	      if @run.save
+					if @run.start.blank?
+	  	      format.html { redirect_to auto_start_run_form_race_path(@race), notice: 'Run could not be started: no start time'}
+  	  	    format.json { render json: @race.errors, status: :unprocessable_entity }
+					else
+		        format.html { redirect_to auto_start_run_form_race_path(@race), notice: message }
+  		      #format.json { render :show, status: :created, location: @race }
+						format.js {}
+      		  format.json { render status: :created }
+					end
+	      else
+  	      format.html { redirect_to auto_start_run_form_race_path(@race), notice: 'Run could not be started.'}
+    	    format.json { render json: @race.errors, status: :unprocessable_entity }
+      	end
+			else
+  	      format.html { redirect_to auto_start_run_form_race_path(@race), notice: 'Run could not be started: no prestarts'}
+    	    format.json { render json: @race.errors, status: :unprocessable_entity }
+			end
+    end
+	end  
+
+# GET /races/1/start_run_form
   def start_run_form
 		@racers = @race.racers.order_by(:order => 'asc')
 		#@runs = @race.runs.where(:heat => @race.current_heat).order_by(:start => 'DESC').limit(3)
@@ -319,10 +427,18 @@ class RacesController < ApplicationController
 			@run = Run.new
 		end
 
-		if params[:run][:start].blank?
-			@run.start = Time.now.round_off(@race.round_start_interval)
+		if @race.auto_start != true
+			if params[:run][:start].blank?
+				@run.start = Time.now.round_off(@race.round_start_interval)
+			else
+				@run.start = Time.parse(params[:run][:start]).round_off(@race.round_start_interval)
+			end
 		else
-			@run.start = Time.parse(params[:run][:start]).round_off(@race.round_start_interval)
+			if params[:run][:start].blank?
+				@run.prestart = Time.now.round_off(@race.round_start_interval)
+			else
+				@run.prestart = Time.parse(params[:run][:start]).round_off(@race.round_start_interval)
+			end
 		end
 		@run.bib = @bib
 		#check for a run in this heat already
@@ -342,7 +458,11 @@ class RacesController < ApplicationController
 			end
 		end
 		@run.boat_class = @racer.boat_class
-		@run.status = "Started"
+		if @race.auto_start != true
+			@run.status = "Started"
+		else
+			@run.status = "PreStarted"
+		end
     respond_to do |format|
 			if !@race.blank?
 				@race.runs << @run
@@ -514,6 +634,6 @@ class RacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_params
-      params.require(:race).permit(:name, :current_heat, :round_start_interval, :start_date, :lock_racer_list_finish, :auto_sync)
+      params.require(:race).permit(:name, :current_heat, :round_start_interval, :start_date, :lock_racer_list_finish, :auto_sync, :auto_start)
     end
 end

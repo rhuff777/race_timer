@@ -1,5 +1,6 @@
 class Run
   include Mongoid::Document
+  field :prestart, type: DateTime
   field :start, type: DateTime
   field :finish, type: DateTime
   field :heat, type: String

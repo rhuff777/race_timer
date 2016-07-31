@@ -21,6 +21,7 @@
         <td><%= link_to "Start Order (#{race.racers.count}) ", "#{racer_dashboard_races_path}#/#{race.id}" %></td>
         <td><%= link_to "Runs (#{race.runs.count})", race_runs_path(race) %></td>
         <td><%= link_to 'Start Run', start_run_form_race_path(race) %></td>
+        <td><%= link_to 'Auto Start Run', auto_start_run_form_race_path(race) %></td>
         <td><%= link_to 'Finish Run', finish_run_form_race_path(race) %></td>
         <td><%= link_to 'Starts', starts_race_path(race) %></td>
         <td><%= link_to 'Finishes', finishes_race_path(race) %></td>
