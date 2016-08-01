@@ -1,6 +1,6 @@
 class RacesController < ApplicationController
   before_action :set_race, only: [:show, :edit, :update, :destroy, :start_run, :start_run_form, :auto_start_run, :auto_start_run_form, :test_auto_start, :finish_run, :finish_run_form, :next_heat, :clear_runs, :clear_racers, :inline_update, :starts, :finishes, :sync_finish, :sync_finishes, :results, :dashboard, :print_start_order, :racer_list, :check_for_more_runs, :score_strips, :clear_unstarted_finishes, :authorize_finish]
-	protect_from_forgery except: [:finish_run, :start_run, :save_all_racers]
+	protect_from_forgery except: [:finish_run, :start_run, :save_all_racers, :auto_start_run, :test_auto_start]
 
 	def print_start_order
 
